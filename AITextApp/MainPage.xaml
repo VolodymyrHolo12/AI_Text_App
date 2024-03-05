@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AITextApp.MainPage"
+             xmlns:local="clr-namespace:AITextApp.ViewModels"
+             xmlns:converters="clr-namespace:AITextApp.Converters"
+             MaximumHeightRequest="500"
+             MaximumWidthRequest="400">
+    <ContentPage.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </ContentPage.Resources>
+    <Grid>
+        <VerticalStackLayout
+            Padding="50,30"
+            Spacing="25">
+            <Entry x:Name="ApiKeyInput"
+                   Placeholder="Input your OpenAI API key:"
+                   Text="{Binding ApiKeyViewModel.ApiKey, Mode=TwoWay}"
+                   TextChanged="ApiKeyEntry_TextChanged"
+                   ClearButtonVisibility="WhileEditing"/>
+            <Label x:Name="ApiKeyValidationLabel"
+                   Text="{Binding ApiKeyViewModel.ValidationMessage, Mode=OneWay}"
+                   TextColor="Red"
+                   IsVisible="{Binding ApiKeyViewModel.IsValid, Converter={StaticResource InverseBooleanConverter}}"/>
+            <Button Text="Validate API Key" 
+                    Command="{Binding ApiKeyViewModel.ValidateApiKeyCommand}"
+                    HorizontalOptions="Center"/>
+            <Entry x:Name="ShortcutInput"
+                   Text="{Binding ShortcutViewModel.Shortcut, Mode=TwoWay}"
+                   Placeholder="Enter your shortcut:"
+                   IsEnabled="{Binding ShortcutViewModel.IsEnabled}"
+                   IsReadOnly="True"/>
+            <Label x:Name="ShortcutValidationLabel" 
+                   Text="{Binding ShortcutViewModel.ValidationMessage}" 
+                   TextColor="Red" 
+                   IsVisible="{Binding ShortcutViewModel.IsValid, Converter={StaticResource InverseBooleanConverter}}"/>
+            <Button x:Name="SettingsButton"
+                    Text="Set shortcut" 
+                    Command="{Binding ShortcutViewModel.StartShortcutSettingCommand}"
+                    HorizontalOptions="Center"/>
+            <Picker x:Name="PromptPicker"
+                    Title="Select an option"
+                    ItemsSource="{Binding PromptViewModel.Prompts}"
+                    SelectedItem="{Binding PromptViewModel.SelectedIndex}"
+                    SelectedIndexChanged="Picker_SelectedIndexChanged"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
